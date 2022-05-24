@@ -1,0 +1,52 @@
+﻿@model Travel
+
+<div class="bg-image-vertical h-100" style="background-image: url(https://img.100r.systems/img/d857f9ce95d1e1efa27b2182d1d64882.jpg);">
+    <div class="mask d-flex align-items-center h-100">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-body">
+
+                <h1 class="mb-5 text-warning text-center">Aggiungi i pacchetti viaggio</h1>
+
+                 <form action="@Url.Action("Create", "Travel")" method="post">
+                    @Html.AntiForgeryToken()
+                  <!--2 Colonne per inserire rispettivamente i dati Titolo e Prezzo-->
+                  <div class="row">
+                    <div class="col-12 col-md-6 mb-4">
+                     <strong>Titolo:</strong>
+                        <input asp-for="Title" class="d-block w-100" />
+                        <span asp-validation-for="Title" class="text-danger"></span>
+                    </div>
+                    <div class="col-12 col-md-6 mb-4">
+                      <strong>Prezzo:</strong>
+                        <input asp-for="Price" class="d-block w-100" />
+                        <span asp-validation-for="Price" class="text-danger"></span>
+                    </div>
+                  </div>
+                  <!--Colonna per inserire l'URL dell'immagine-->
+                  <div class="row mb-4">
+                    <div class="col-12">  
+                    <strong>Immagine:</strong>
+                        <input asp-for="Image" class="d-block w-100" />
+                        <span asp-validation-for="Image" class="text-danger"></span>
+                    </div>
+                  </div>
+                  <!-- Descrizione -->
+                  <div class="form-outline mb-4">
+                    <strong>Descrizione:</strong>
+                    <textarea asp-for="Description" rows="10" class="d-block w-100"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                  </div>
+
+                  <!-- Submit button -->
+                  <button type="submit" class="btn btn-warning btn-rounded btn-block">Salva</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

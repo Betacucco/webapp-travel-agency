@@ -1,0 +1,118 @@
+﻿<!--Immagine pre-intestazione-->
+<div class="container-fluid">
+    <div class="row-fluid text-center">
+        <img src="https://www.tvturismo.org/wp-content/uploads/2015/09/copertina-658x439.jpg" class="img-responsive m-0" alt="luoghi diversi"></img>
+    </div>
+</div>
+
+<!--Intestazione-->
+<div class="container mt-3 mb-2">
+    <div class="row text-center">
+        <div class="col-12">
+            <h1>Viaggi</h1>
+        </div>
+        <div class="col-12">
+            <p class="text-secondary fs-5 mw-50">
+                Questi sono i fantastici viaggi offerti
+                da noi.
+            </p>
+        <div class="col-12">
+            <input id="search_travel" class="border border-3 border-dark" type="text" placeholder="Cerca Viaggio">
+        </div>
+        </div>
+    </div>
+</div>
+
+<!--Sezione dei pacchetti viaggio-->
+<section>
+    <div class="container-fluid m-5">
+            <!--Pagina in attesa dei viaggi-->
+            <div id="wait_travel" class="row text-center">
+                <h3>Caricamento Viaggi</h3>
+            </div>
+            <!--Pagina senza viaggi-->
+            <div id="no_travel" class="row text-center d-none">
+                <h3>Non ci sono viaggi!</h3>
+            </div>
+            <!--Pagina con i viaggi-->
+            <div id="travel_with_input" class="row d-none">
+                <!--Qui ci saranno i nostri pacchetti-->
+            </div>
+    </div>
+</section>
+
+
+<!--Sezione degli Scripts-->
+@section Script {
+<script type="text/javascript">
+
+//Aggiungiamo evento di keyup richiamando la funzione di ricerca della stringa
+document.getElementById('search_travel').addEventListener('keyup', searchParameter);
+
+searchParameter();
+
+//Funzione che cerca la stringa in base al valore associato nella barra di ricerca
+//richiamando la funzione che carica le card dei viaggi
+function searchParameter() {
+    var inputOfSearch = document.getElementById('search_travel').value;
+    loadTravel(inputOfSearch);
+}
+
+function redirectToTravelsDetails(id){
+            window.location.href=`/Home/TravelsDetails/${id}`;
+            console.log(id);
+}
+
+//Funzione che carica le card dei viaggi tramite axios
+function loadTravel(parameter) {
+
+    document.getElementById('travel_with_input').innerHTML = '';
+    
+    axios.get('/api/Travels/Get', {
+        params : {
+            searchString : parameter
+        }
+    }).then((result) => {
+        console.log(result);
+        
+        //In base al numero di elementi JSON o restituiamo che non ci sono viaggi
+        //oppure restituiamo tutti i viaggi
+        if (result.data.lenght == 0) 
+        {
+            document.getElementById('wait_travel').classList.add('d-none');
+            document.getElementById('no_travel').classList.remove('d-none');
+        } 
+        else 
+        {
+            document.getElementById('wait_travel').classList.add('d-none');
+            document.getElementById('travel_with_input').classList.remove('d-none');
+
+            result.data.forEach(travel => {
+                
+            document.getElementById('travel_with_input').innerHTML +=
+            `
+                <div class="col-lg-4 col-12">
+                    <div class="shadow-lg text-center pb-3 rounded-bottom">   
+                        <figure class="figure button w-100" name="submit" type="button" value="Load new document" 
+                        onclick="redirectToTravelsDetails(${travel.id})">
+                            <img src="${travel.image}" class="figure-img w-100 mb-0" alt="Immagini luoghi">
+                                <figcaption class="figure-caption bg-warning">
+                                    <h4 class="text-uppercase text-white pt-3 pb-3">${travel.title}</h4>
+                                </figcaption>
+                        </figure>
+                        <p class="mb-2">${travel.description}</p>
+                        <hr class="mb-2 text-warning border border-3 border-warning">
+                        <span class="fw-bold m-3">${travel.price} &euro;/person</span>
+                        <hr class="mb-2 text-warning border border-3 border-warning">
+                              
+                  </div>
+                </div>
+            `
+            });
+        }
+    }).catch((error) => {
+    console.log(error);
+    });
+}
+</script>
+}

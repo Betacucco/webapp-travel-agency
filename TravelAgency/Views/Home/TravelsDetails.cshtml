@@ -1,0 +1,52 @@
+﻿<!--Sezione del pacchetto viaggio-->
+<section>
+    <div class="container-fluid m-5">
+        <!--Pagina con i viaggi-->
+        <div id="package" class="row">
+              
+        </div>
+    </div>
+</section>
+
+
+@section Script{
+<script type="text/javascript">
+    
+    var url = window.location.pathname;
+    var id = url.substring(url.lastIndexOf('/') + 1);
+
+load(id);
+
+function load(parameterId){
+    document.getElementById('package').innerHTML = '';
+
+    axios.get('/api/Travels/GetById/' + parameterId).then((result) => {
+        console.log(result);
+               
+                if (result.data.id == parameterId)
+                {
+                    document.getElementById('package').innerHTML += 
+                    `
+                     <div class="col-lg-4 col-12">
+                        <div class="shadow-lg text-center pb-3 rounded-bottom">   
+                        <figure class="figure w-100">
+                            <img src="${result.data.image}" class="figure-img w-100 mb-0" alt="Immagini luoghi">
+                                <figcaption class="figure-caption bg-warning">
+                                    <h4 class="text-uppercase text-white pt-3 pb-3">${result.data.title}</h4>
+                                </figcaption>
+                        </figure>
+                        <p class="mb-2">${result.data.description}</p>
+                        <hr class="mb-2 text-warning border border-3 border-warning">
+                        <span class="fw-bold m-3">${result.data.price} &euro;/person</span>
+                        <hr class="mb-2 text-warning border border-3 border-warning">      
+                        </div>
+                    </div>
+                    `
+                }
+                
+            }).catch((error) => {
+                console.log("Errore: " + error);
+            });
+        }
+</script>
+}
