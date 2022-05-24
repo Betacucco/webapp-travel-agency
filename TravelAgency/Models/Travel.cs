@@ -24,6 +24,8 @@ namespace TravelAgency.Models
         [Range(20, 10000, ErrorMessage = "Il viaggio non puo' costare meno di 20 euro")]
         public double Price { get; set; }
 
+        public List<User> Travels { get; set; }
+
         public Travel()
         {
 

@@ -55,5 +55,35 @@ namespace TravelAgency.Controllers.Api
                     return Ok(travelToFound);
             }
         }
+
+        [HttpPost]
+        public IActionResult Form(TravelUser data)
+        {
+            if (!ModelState.IsValid)
+            {
+                using (TravelContext context = new TravelContext())
+                {
+                    List<Travel> travelsList = context.Travels.ToList();
+
+                    data.Travel = travelsList;
+                }
+
+                return RedirectToAction("GetById", data);
+            }
+
+            using(TravelContext context = new TravelContext())
+            {
+                User newUser = new User();
+                newUser.Name = data.Users.Name;
+                newUser.Email = data.Users.Email;
+                newUser.Message = data.Users.Message;
+                newUser.TravelId = data.Users.TravelId;
+
+                context.Users.Add(newUser);
+                context.SaveChanges();
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
