@@ -92,7 +92,9 @@ function sendForm(event) {
 
 axios.post('/api/Travels/Post/' + id, request)
   .then((request) => {
-      console.log(request);
+      alert("Messaggio inviato correttamente");
+
+      window.location.assign(url);
   })
   .catch((error) => {
     console.log(error);

@@ -1,5 +1,6 @@
 ﻿@model Travel
 
+<!--Container con dettagli pacchetto e tabella richieste utente associate al pacchetto-->
 <div class="container m-3">
     <div class="row">
         <div class="col-lg-4 col-12">
@@ -17,6 +18,38 @@
 
                 <span class="fw-bold pb-2">@Model.Price &euro;/person</span>
             </div>
+        </div>
+        <div class="col-lg-4 col-12">
+            <h3>Tabella Richieste</h3>
+            <!--Se non ci sono richieste restituisce H2 altrimenti una table delle informazioni inserite-->
+            @if(@Model.Travels.Count == 0)
+            {
+                <h2 class="text-warning text-uppercase">non ci sono richieste sui pacchetti</h2>
+            }
+            else
+            {
+                <table class="table align-middle">
+                    <thead>
+                        <tr>
+                        <th scope="col">Nome</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Messaggio</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        
+                @foreach(User informazioni in Model.Travels)
+                {
+                    <tr>
+                        <td class="align-middle">@informazioni.Name</td>
+                        <td class="align-middle">@informazioni.Email</td>
+                        <td class="align-middle">@informazioni.Message</td>
+                    </tr>
+                }
+
+                    </tbody>
+                </table>
+            }
         </div>
     </div>
 </div>

@@ -44,7 +44,8 @@ namespace TravelAgency.Controllers.Api
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
-
+            //Troviamo l'id corrispondente al pacchetto con lo stesso id
+            //Ritorniamo quel pacchetto oppure NOTFOUND
             using (TravelContext context = new TravelContext())
             {
                 Travel? travelToFound = context.Travels
@@ -61,14 +62,14 @@ namespace TravelAgency.Controllers.Api
         [HttpPost("{id}")]
         [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Post([FromBody] User model)
         {
+            //Se il modello non e' valido errore 422
             if (!ModelState.IsValid)
             {
                 return UnprocessableEntity(ModelState);
             }
-
+            //Altrimenti aggiungiamo al nostro DB i dati inseriti dall'user
             using (TravelContext context = new TravelContext())
             {
 

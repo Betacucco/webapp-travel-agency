@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TravelAgency.Data;
 using TravelAgency.Models;
 
@@ -31,6 +32,7 @@ namespace TravelAgency.Controllers
             {
                 Travel? travelToFound = context.Travels
                     .Where(travel => travel.Id == id)
+                    .Include(travel => travel.Travels)
                     .FirstOrDefault();
 
                 if (travelToFound == null)
