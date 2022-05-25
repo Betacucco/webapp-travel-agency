@@ -1,33 +1,36 @@
 ﻿<!--Sezione del pacchetto viaggio-->
 <section>
-    <div class="container-fluid m-5">
+    <div class="container-fluid text-center m-5">
+        <div class="row">
         <!--Pagina con i viaggi-->
-        <div id="package" class="row">
+        <div id="package" class="col-6">
               
         </div>
-        <div class="col-6">
-            <form onsubmit="sendForm(event)">
+        <div class="col-4 m-2">
+            <h3>Inviaci un messaggio per avere piu' informazioni</h3>
+            <form onsubmit="sendForm(event)" method="post">
                 <!-- Name input -->
                 <div class="form-outline mb-4">
-                    <input type="text" id="Name" class="form-control" />
+                    <input type="text" id="Name" name="Name" class="form-control" />
                     <label class="form-label" for="Name">Name</label>
                 </div>
 
                 <!-- Email input -->
                 <div class="form-outline mb-4">
-                    <input type="email" id="Email" class="form-control" />
+                    <input type="email" id="Email" name="Email" class="form-control" />
                     <label class="form-label" for="Email">Email address</label>
                 </div>
 
                 <!-- Message input -->
                 <div class="form-outline mb-4">
-                    <textarea class="form-control" id="Message" rows="4"></textarea>
+                    <textarea class="form-control" id="Message" name="Message" rows="4"></textarea>
                     <label class="form-label" for="Message">Message</label>
                 </div>
 
                 <!-- Submit button -->
-                <button type="submit" class="btn btn-primary btn-block mb-4">Send</button>
+                <button type="submit" class="btn btn-warning btn-block mb-4">Send</button>
             </form>
+        </div>
         </div>
     </div>
 </section>
@@ -41,37 +44,10 @@
 
 load(id);
 
-function sendForm(event) {
-    event.preventDefault();
-    
-    var name = document.getElementById('Name').value;
-    var email = document.getElementById('Email').value;
-    var message = document.getElementById('Message').value;
-    var idPackage = id;
-
-    var request = {
-        Name: name,
-        Email: email,
-        Message: message,
-        TravelId: id
-    }
-
-    axios.post('/api/Travels/Form', request)
-.then(function (response) {
-    console.log(response);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
-
-}
-
-
 function load(parameterId){
     document.getElementById('package').innerHTML = '';
 
     axios.get('/api/Travels/GetById/' + parameterId).then((result) => {
-        console.log(result);
                
                 if (result.data.id == parameterId)
                 {
@@ -79,7 +55,7 @@ function load(parameterId){
                     `
                      <div class="col-6">
                         <div class="shadow-lg text-center pb-3 rounded-bottom">   
-                        <figure class="figure w-100">
+                        <figure class="figure">
                             <img src="${result.data.image}" class="figure-img w-100 mb-0" alt="Immagini luoghi">
                                 <figcaption class="figure-caption bg-warning">
                                     <h4 class="text-uppercase text-white pt-3 pb-3">${result.data.title}</h4>
@@ -98,5 +74,29 @@ function load(parameterId){
                 console.log("Errore: " + error);
             });
         }
+
+function sendForm(event) {
+    event.preventDefault();
+    
+    var name = document.getElementById('Name').value;
+    var email = document.getElementById('Email').value;
+    var message = document.getElementById('Message').value;
+    var idPackage = id;
+
+    var request = {
+        Name: name,
+        Email: email,
+        Message: message,
+        TravelId: idPackage
+    }
+
+axios.post('/api/Travels/Post/' + id, request)
+  .then((request) => {
+      console.log(request);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 </script>
 }

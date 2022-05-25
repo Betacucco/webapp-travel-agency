@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using TravelAgency.Data;
 using TravelAgency.Models;
 
@@ -43,6 +44,7 @@ namespace TravelAgency.Controllers.Api
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public IActionResult GetById(int id)
         {
+
             using (TravelContext context = new TravelContext())
             {
                 Travel? travelToFound = context.Travels
@@ -56,34 +58,32 @@ namespace TravelAgency.Controllers.Api
             }
         }
 
-        [HttpPost]
-        public IActionResult Form(TravelUser data)
+        [HttpPost("{id}")]
+        [ProducesResponseType(typeof(User), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Post([FromBody] User model)
         {
             if (!ModelState.IsValid)
             {
-                using (TravelContext context = new TravelContext())
-                {
-                    List<Travel> travelsList = context.Travels.ToList();
-
-                    data.Travel = travelsList;
-                }
-
-                return RedirectToAction("GetById", data);
+                return UnprocessableEntity(ModelState);
             }
 
-            using(TravelContext context = new TravelContext())
+            using (TravelContext context = new TravelContext())
             {
-                User newUser = new User();
-                newUser.Name = data.Users.Name;
-                newUser.Email = data.Users.Email;
-                newUser.Message = data.Users.Message;
-                newUser.TravelId = data.Users.TravelId;
 
-                context.Users.Add(newUser);
-                context.SaveChanges();
+                    User userToAdd = new User();
+                    userToAdd.Name = model.Name;
+                    userToAdd.Email = model.Email;
+                    userToAdd.Message = model.Message;
+                    userToAdd.TravelId = model.TravelId;    
+
+                    context.Add(userToAdd);
+                    context.SaveChanges();
+                    return Ok();                
             }
 
-            return RedirectToAction("Index");
         }
     }
 }
+

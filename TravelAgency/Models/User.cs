@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace TravelAgency.Models
 {
@@ -20,14 +21,22 @@ namespace TravelAgency.Models
         [Column(TypeName = "text")]
         public string Message { get; set; }
 
-        public Travel Travel { get; set; }
-
         public int TravelId { get; set; }
+
+        [JsonIgnore]
+        public Travel? Travel { get; set; }
 
         public User()
         {
 
         }
 
+        /*public User(string name, string email, string message, int travelId)
+        {
+            Name = name;
+            Email = email;
+            Message = message;
+            TravelId = travelId;
+        }*/
     }
 }

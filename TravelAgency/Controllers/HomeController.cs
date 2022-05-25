@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using TravelAgency.Data;
 using TravelAgency.Models;
 
 namespace TravelAgency.Controllers
